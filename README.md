@@ -6,3 +6,6 @@ Basically collect data from multiple data sources, perform some preprocessing st
 
 ## Web Scraping
 Web scraping is used for extraction of relevant data from web pages. If you require some data from a web page in a public domain, web scraping makes the process of data extraction quite convenient. The use of web scraping, however, requires some basic knowledge of the structure of HTML pages.
+
+## What is SQLite3?
+SQLite3 is an in-process Python library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine. It is a popular choice as an embedded database for local/client storage in application software.
