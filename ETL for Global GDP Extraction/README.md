@@ -9,3 +9,16 @@ Your boss wants you to demonstrate the success of this code by running a query o
 
 You must create a Python code 'etl_project_gdp.py' that performs all the required tasks.
 
+## Objectives
+
+You have to complete the following tasks for this project:
+
+1. Write a data extraction function to retrieve the relevant information from the required URL.
+
+2. Transform the available GDP information into 'Billion USD' from 'Million USD'.
+
+3. Load the transformed information to the required CSV file and as a database file.
+
+4. Run the required query on the database.
+
+5. Log the progress of the code with appropriate timestamps.
