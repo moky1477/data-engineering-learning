@@ -8,10 +8,11 @@ import numpy as np
 # Initialising all the known entities
 url = 'https://web.archive.org/web/20230902185326/https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29'
 table_attribs = ['Country', 'GDP_USD_millions']
-db_name = 'ETL for Global GDP Extraction/World_Economies.db'
+db_name = 'ETL_Global_GDP_Extraction/World_Economies.db'
 table_name = 'Countries_by_GDP'
-csv_path = 'ETL for Global GDP Extraction/Countries_by_GDP.csv'
+csv_path = 'ETL_Global_GDP_Extraction/Countries_by_GDP.csv'
 sql_connection = sqlite3.connect(db_name)
+combined_attributes = [url, table_attribs, csv_path, sql_connection, table_name]
 
 def extract(url, table_attribs):
     ''' 
@@ -83,19 +84,23 @@ def log_progress(message):
     timestamp_format = '%Y-%h-%d-%H:%M:%S' # Year-Monthname-Day-Hour-Minute-Second 
     now = datetime.now() # get current timestamp 
     timestamp = now.strftime(timestamp_format) 
-    with open("ETL for Global GDP Extraction/etl_project_log.txt","a") as f: 
+    with open("ETL_Global_GDP_Extraction/etl_project_log.txt","a") as f: 
         f.write(timestamp + ' : ' + message + '\n')
 
-log_progress('Preliminaries complete. Initiating ETL process')
-df = extract(url, table_attribs)
-log_progress('Data extraction complete. Initiating Transformation process')
-df = transform(df)
-log_progress('Data transformation complete. Initiating loading process')
-load_to_csv(df, csv_path)
-log_progress('Data Saved to csv file')
-load_to_db(df, sql_connection, table_name)
-log_progress('Data loaded to Database as table. Running the query')
-query = f"SELECT * from {table_name} WHERE GDP_USD_billions >= 100"
-run_query(query, sql_connection)
-log_progress('Process Complete')
-sql_connection.close()
+def execution_pipeline(all_required_attributes):
+    log_progress('Preliminaries complete. Initiating ETL process')
+    df = extract(url, table_attribs)
+    log_progress('Data extraction complete. Initiating Transformation process')
+    df = transform(df)
+    log_progress('Data transformation complete. Initiating loading process')
+    load_to_csv(df, csv_path)
+    log_progress('Data Saved to csv file')
+    load_to_db(df, sql_connection, table_name)
+    log_progress('Data loaded to Database as table. Running the query')
+    query = f"SELECT * from {table_name} WHERE GDP_USD_billions >= 100"
+    run_query(query, sql_connection)
+    log_progress('Process Complete')
+    sql_connection.close()
+
+if __name__ == '__main__':
+    execution_pipeline(combined_attributes)
