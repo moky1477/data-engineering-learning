@@ -12,7 +12,7 @@ db_name = 'ETL_Global_GDP_Extraction/World_Economies.db'
 table_name = 'Countries_by_GDP'
 csv_path = 'ETL_Global_GDP_Extraction/Countries_by_GDP.csv'
 sql_connection = sqlite3.connect(db_name)
-all_required_attributes = [url, table_attribs, csv_path, sql_connection, table_name]
+combined_attributes = [url, table_attribs, csv_path, sql_connection, table_name]
 
 def extract(url, table_attribs):
     ''' 
@@ -103,4 +103,4 @@ def execution_pipeline(all_required_attributes):
     sql_connection.close()
 
 if __name__ == '__main__':
-    execution_pipeline(all_required_attributes)
+    execution_pipeline(combined_attributes)
