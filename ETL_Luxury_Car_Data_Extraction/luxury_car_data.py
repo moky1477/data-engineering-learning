@@ -10,6 +10,7 @@ bmw_url = 'https://www.bmw.in/en/all-models.html'
 merc_url = 'https://www.mbusa.com/en/all-vehicles'
 table_attributes = ['Brand_Name', 'Car_Name', 'Car_Type', 'Base_model_price']
 db_name = 'ETL_Luxury_Car_Data_Extraction/Luxury_cars.db'
+table_name = 'Luxury_cars_table'
 csv_path = 'ETL_Luxury_Car_Data_Extraction/Luxury_cars.csv'
 sql_connection = sqlite3.connect(db_name)
 combined_attributes = [merc_url, bmw_url, table_attributes, db_name, csv_path, sql_connection]
@@ -20,7 +21,7 @@ def extract(merc_url, bmw_url, table_attributes):
     information from the website and saves it to a dataframe.
     The function returns the dataframe for further processing.
     '''
-    
+
     def extract_bmw(bmw_url, table_attributes):
         df_bmw = pd.DataFrame(columns=table_attributes)
         html_page = requests.get(bmw_url).text
@@ -70,9 +71,6 @@ def extract(merc_url, bmw_url, table_attributes):
         df_merc = pd.DataFrame(rows, columns=table_attributes)
         return df_merc
     
-    # Define table attributes for the dataframe
-    table_attributes = ['Brand_Name', 'Car_Name', 'Car_Type', 'Base_model_price']
-
     df_bmw = extract_bmw(bmw_url, table_attributes)
     df_merc = extract_merc(merc_url, table_attributes)
 
@@ -95,21 +93,44 @@ def transform(df):
 
     df['Base_model_price'] = df['Base_model_price'].replace('', 'Not Available')
     df['Base_model_price'] = df['Base_model_price'].replace('N/A', 'Not Available')
+
+    df['Base_model_price'] = df['Base_model_price'].str.replace(',', '', regex=False)
+
+    df['Base_model_price'] = df['Base_model_price'].apply(lambda x: float(x) if pd.notna(x) and x.strip() != '' and x.replace('.', '', 1).isdigit() else np.nan)
+    df['Base_model_price'] = df['Base_model_price'].apply(lambda x: x*83.77 if pd.notna(x) and x < 500000 else x)
+    
     return df
 
-# 3. load_to_csv()
+def load_to_csv(df, csv_path):
+    df.to_csv(csv_path, index=False)
 
-# 4. load_to_db()
+def load_to_db(df, sql_connection, table_name):
+    df.to_sql(name=table_name, con=sql_connection, if_exists='replace', index=False)
 
-# 5. run_query()
+def log_progress(message):
+    ''' This function logs the mentioned message at a given stage of the code execution to a log file. '''
+    timestamp_format = '%Y-%m-%d %H:%M:%S' # Year-Month-Day Hour:Minute:Second 
+    now = datetime.now() # get current timestamp 
+    timestamp = now.strftime(timestamp_format) 
+    with open("ETL_Luxury_Car_Data_Extraction/etl_project_log.txt", "a") as f: 
+        f.write(timestamp + ' : ' + message + '\n')
 
-# 6. log_progress()
+def execution_pipeline(combined_attributes):
+    '''
+    Streamline all the calling of above defined functions. 
+    Also log the progress while calling functions.
+    '''
+    log_progress('Preliminaries complete. Initiating ETL process')
+    df = extract(merc_url, bmw_url, table_attributes)
+    log_progress('Data extraction complete. Initiating Transformation process')
+    df = transform(df)
+    log_progress('Data transformation complete. Initiating loading process')
+    load_to_csv(df, csv_path)
+    log_progress('Data Saved to csv file')
+    load_to_db(df, sql_connection, table_name)
+    log_progress('Data loaded to Database as table')
+    log_progress('Process Complete')
+    sql_connection.close()
 
-# 7. execution_pipeline():
-'''
-Streamline all the calling of above defined functions. 
-Also log the progress while calling functions.
-'''
-df = extract(merc_url, bmw_url, table_attributes)
-df = transform(df)
-df.to_csv(csv_path, index=False)
+if __name__ == '__main__':
+    execution_pipeline(combined_attributes)
