@@ -9,3 +9,13 @@ Web scraping is used for extraction of relevant data from web pages. If you requ
 
 ## SQLite3
 SQLite3 is an in-process Python library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine. It is a popular choice as an embedded database for local/client storage in application software.
+
+ETL Process: ETL stands for Extract, Transform, and Load. It involves curating data from multiple sources, transforming it into a unified format, and loading it into a new environment for analysis.
+
+Data Extraction: Extraction is the process of obtaining or reading data from one or more sources. This can be done through methods like web scraping or using APIs to programmatically connect to data.
+
+Data Transformation: Transformation involves processing the data to make it suitable for its destination and intended use. This includes cleaning, filtering, joining disparate data sources, feature engineering, and formatting.
+
+Data Loading: Loading refers to writing the transformed data to a new destination environment, such as databases, data warehouses, or data marts. The goal is to make the data readily available for visualization, exploration, and further analysis.
+
+Use Cases for ETL: ETL pipelines are used in various scenarios, such as digitizing analog data, capturing transaction history for analysis, engineering features for dashboards, and training machine learning models for prediction and decision-making.
