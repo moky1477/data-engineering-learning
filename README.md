@@ -19,3 +19,26 @@ Data Transformation: Transformation involves processing the data to make it suit
 Data Loading: Loading refers to writing the transformed data to a new destination environment, such as databases, data warehouses, or data marts. The goal is to make the data readily available for visualization, exploration, and further analysis.
 
 Use Cases for ETL: ETL pipelines are used in various scenarios, such as digitizing analog data, capturing transaction history for analysis, engineering features for dashboards, and training machine learning models for prediction and decision-making.
+
+# ETL and Data Pipelines with Airflow and Kafka
+
+Module 1:
+ETL stands for Extract, Transform, and Load 
+
+Loading means writing the data to its destination environment 
+
+Cloud platforms are enabling ELT to become an emerging trend 
+
+The key differences between ETL and ELT include the place of transformation, flexibility, Big Data support, and time-to-insight 
+
+There is an increasing demand for access to raw data that drives the evolution from ETL, which is still used, to ELT, which enables ad-hoc, self-serve analytics 
+
+Data extraction often involves advanced technology including database querying, web scraping, and APIs  
+
+Data transformation, such as typing, structuring, normalizing, aggregating, and cleaning, is about formatting data to suit the application 
+
+Information can be lost in transformation processes through filtering and aggregation 
+
+Data loading techniques include scheduled, on-demand, and incremental 
+
+Data can be loaded in batches or streamed continuously 
